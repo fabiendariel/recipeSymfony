@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use App\Repository\RecipeRepository;
 use Doctrine\DBAL\Types\Types;
+use Symfony\Component\Validator\Constraints as Assert;
+use App\Validator\BanWord;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: RecipeRepository::class)]
@@ -14,20 +16,32 @@ class Recipe
     #[ORM\Column]
     private ?int $id = null;
 
+    #[Assert\Length(min: 10, minMessage: 'Merci de renseigner au moins 10 caractères')]    
+    #[Assert\NotBlank(message: 'Merci de renseigner un titre')]
     #[ORM\Column(length: 255)]
-    private ?string $title = null;
+    #[BanWord()]
+    private ?string $title = '';
 
     #[ORM\Column(length: 255)]
+    #[Assert\Length(min: 10, minMessage: 'Merci de renseigner au moins 10 caractères')]
+    #[Assert\Regex('/^[a-z0-9]+(?:-[a-z0-9]+)*$/', message: 'Ceci n\'est pas un slug valide')]
     private ?string $slug = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $content = null;
+    #[ORM\Column(length: 500)]
+    #[Assert\NotBlank(message: 'Les étapes de la recette doivent être complétées')]
+    #[Assert\Length(min: 10, max: 500, minMessage: 'Merci de renseigner au moins 10 caractères', maxMessage: 'Merci de ne pas dépasser 500 caractères')]
+    private ?string $content = '';
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    private \DateTime $createdAt;
+    private ?\DateTime $createdAt;
+    
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    private ?\DateTime $updatedAt;
 
     #[ORM\Column(nullable: true)]
-    private ?int $duration = null;
+    #[Assert\NotBlank(message: 'La durée doit être complétée')]
+    #[Assert\Positive(message: 'La durée doit être supérieure à 0.')]
+    private ?int $duration = 0;
 
     public function getId(): ?int
     {
@@ -70,7 +84,7 @@ class Recipe
         return $this;
     }
 
-    public function getCreatedAt(): \DateTime
+    public function getCreatedAt(): ?\DateTime
     {
         return $this->createdAt;
     }
@@ -78,6 +92,16 @@ class Recipe
     public function setCreatedAt(\DateTime $createdAt): void
     {
         $this->createdAt = $createdAt;
+    }
+    
+    public function getUpdatedAt(): ?\DateTime
+    {
+        return $this->updatedAt;
+    }
+
+    public function setUpdatedAt(\DateTime $updatedAt): void
+    {
+        $this->updatedAt = $updatedAt;
     }
 
     public function getDuration(): ?int
