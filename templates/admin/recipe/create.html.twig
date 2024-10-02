@@ -1,0 +1,15 @@
+{% extends 'base.html.twig' %}
+
+		{% block title "Créer une nouvelle recette" %}
+
+		{% block body %}
+			<h1 class="mb-4">Créer une nouvelle recette</h1>
+			<div class="card">
+				<div class="card-body">
+					<p
+						class="card-text">
+						{{ form(form, {'method': 'POST'}) }}
+					</p>
+				</div>
+			</div>
+		{% endblock %}

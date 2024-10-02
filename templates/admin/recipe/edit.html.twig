@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+		{% block title "Editer Recette : " ~ recipe.title %}
+
+		{% block body %}
+			<h1 class="mb-4">Editer
+				{{ recipe.title }}</h1>
+			<div class="card">
+				<div class="card-body">
+					<p
+						class="card-text">
+						{{ form(form, {'method': 'POST'}) }}
+						{#{{ form_start(form) }}
+						<div class="d-flex">{{ form_row(form.title) }}</div>
+						<div class="d-flex">{{ form_row(form.slug) }}</div>
+						<div class="d-flex">{{ form_row(form.content) }}</div>
+						<div class="d-flex">{{ form_row(form.createdAt) }}</div>
+						<div class="d-flex">{{ form_row(form.duration) }}</div>
+            {{ form_rest(form) }}
+						{{ form_end(form) }}#}
+					</p>
+				</div>
+			</div>
+		{% endblock %} 
